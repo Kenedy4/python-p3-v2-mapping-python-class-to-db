@@ -10,3 +10,21 @@ class Department:
 
     def __repr__(self):
         return f"<Department {self.id}: {self.name}, {self.location}>"
+    @classmethod
+    def create_table(cls):
+        """Create a new table to pesrist the attibutes of the department instance"""
+        sql = """CREATE TABLE IF NOT EXISTS Ddepartments (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            location TEXT
+        ) """
+        CURSOR.execute(sql)
+        CONN.commit()
+        print("Department table created successfully.")
+    @classmethod
+    def drop_table(cls):
+        """Drop the table that persists Department instances"""
+        sql = """DROP TABLE IF EXISTS departments"""
+        CURSOR.execute(sql)
+        CONN.commit()
+        print("Department table dropped successfully.")
