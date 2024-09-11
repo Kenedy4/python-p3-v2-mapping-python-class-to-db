@@ -28,3 +28,13 @@ class Department:
         CURSOR.execute(sql)
         CONN.commit()
         print("Department table dropped successfully.")
+    
+    def save(self):
+        """"Insert a new row with the name and location values of the current Department.
+        Update object id attributes using the primary key of the new row"""
+        sql = """INSERT INTO departments (name, location) VALUES (?, ?)"""
+        CURSOR.execute(sql, (self.name, self.location))
+        self.id = CURSOR.lastrowid
+        CONN.commit()
+        print(f"Department {self.id} saved successfully.")
+       
