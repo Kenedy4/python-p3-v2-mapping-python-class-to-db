@@ -13,7 +13,7 @@ class Department:
     @classmethod
     def create_table(cls):
         """Create a new table to pesrist the attibutes of the department instance"""
-        sql = """CREATE TABLE IF NOT EXISTS Ddepartments (
+        sql = """CREATE TABLE IF NOT EXISTS departments (
             id INTEGER PRIMARY KEY,
             name TEXT,
             location TEXT
@@ -32,9 +32,34 @@ class Department:
     def save(self):
         """"Insert a new row with the name and location values of the current Department.
         Update object id attributes using the primary key of the new row"""
-        sql = """INSERT INTO departments (name, location) VALUES (?, ?)"""
+        sql = """
+           INSERT INTO departments (name, location) 
+           VALUES (?, ?)"""
         CURSOR.execute(sql, (self.name, self.location))
-        self.id = CURSOR.lastrowid
         CONN.commit()
+        self.id = CURSOR.lastrowid
         print(f"Department {self.id} saved successfully.")
-       
+    @classmethod
+    def create(cls,name,location):
+        """Create a new Department instance with the given name and location"""
+        department = cls(name, location)
+        department.save()
+        return department   
+    
+    def update(self):
+        """Update the table row corresponding to the current department instance."""
+        sql = """
+            UPDATE departments
+            SET name = ?, location = ?
+            WHERE id =?
+          """
+        CURSOR.execute(sql, (self.name, self.location, self.id))
+        CONN.commit()
+        print(f"Department {self.name} {self.location} {self.id} updated successfully.")
+    def delete(self):
+        """Delete the table row corresponding to the current department instance
+        """
+        sql = """DELETE FROM departments WHERE id = ?"""
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+        print(f"Department {self.id} deleted successfully.")
